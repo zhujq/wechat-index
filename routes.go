@@ -21,7 +21,8 @@ type ResBody struct {
 	Status      string `json:"status"`
 	Mediatype   string `json:"mediatype"`
 	Mediaid     string `json:"mediaid"`
-	Mediaurl     string `json:"mediaurl"`
+	Mediatitle  string `json:"mediatitle"`
+	Mediaurl    string `json:"mediaurl"`
 	Mediadigest string `json:"mediadigest"`
 	Mediathumb  string `json:"mediathumb"`
 }
@@ -69,7 +70,7 @@ func indexHandler(ctx dotweb.Context) error {
 	}
 
 	keyword = strings.ReplaceAll(keyword,` `,`%" and title like "%`)
-	sqlstr := `select mediatype,mediaid,url,digest,thumbmedia from media where title like "%` + keyword + `%"  order by rand() limit 1; `
+	sqlstr := `select mediatype,mediaid,title,url,digest,thumbmedia from media where title like "%` + keyword + `%"  order by rand() limit 1; `
 	log.Println(sqlstr)
 
 	row, err := db.Query(sqlstr)
@@ -86,7 +87,7 @@ func indexHandler(ctx dotweb.Context) error {
 	
 	count := 0
 	for row.Next() {
-		if err := row.Scan(&message.Mediatype,&message.Mediaid,&message.Mediaurl,&message.Mediadigest,&message.Mediathumb); err != nil {
+		if err := row.Scan(&message.Mediatype,&message.Mediaid,&message.Mediatitle,&message.Mediaurl,&message.Mediadigest,&message.Mediathumb); err != nil {
 			log.Println("error:", err)	
 			return ctx.WriteJsonC(http.StatusOK, message)
 		}	
