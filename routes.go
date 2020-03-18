@@ -48,7 +48,7 @@ func indexHandler(ctx dotweb.Context) error {
 
 	if keyword == "" {
 		log.Println("ERROR: 没有提供keyword")
-		return ctx.WriteJsonC(http.StatusOK, message)
+		return ctx.WriteJsonC(http.StatusNotFound, message)
 	}
 
 	db, err := sql.Open("mysql",Dbconn)
@@ -56,7 +56,7 @@ func indexHandler(ctx dotweb.Context) error {
 	err = db.Ping()
 	if err != nil{
 		log.Println("error:", err)	
-		return ctx.WriteJsonC(http.StatusOK, message)
+		return ctx.WriteJsonC(http.StatusNotFound, message)
 	}
 
 	for {                                            //去掉Keyword首尾空格
@@ -77,19 +77,19 @@ func indexHandler(ctx dotweb.Context) error {
 	defer row.Close()
 	if err != nil {
 		log.Println("error:", err)	
-		return ctx.WriteJsonC(http.StatusOK, message)
+		return ctx.WriteJsonC(http.StatusNotFound, message)
 	}
 
 	if err = row.Err(); err != nil {
 		log.Println("error:", err)	
-		return ctx.WriteJsonC(http.StatusOK, message)
+		return ctx.WriteJsonC(http.StatusNotFound, message)
 	}
 	
 	count := 0
 	for row.Next() {
 		if err := row.Scan(&message.Mediatype,&message.Mediaid,&message.Mediatitle,&message.Mediaurl,&message.Mediadigest,&message.Mediathumb); err != nil {
 			log.Println("error:", err)	
-			return ctx.WriteJsonC(http.StatusOK, message)
+			return ctx.WriteJsonC(http.StatusNotFound, message)
 		}	
 		count += 1;
 		message.Status = "success"
@@ -97,7 +97,7 @@ func indexHandler(ctx dotweb.Context) error {
 
 	if count ==0 {
 		message.Status = "failed"
-		return ctx.WriteJsonC(http.StatusOK, message)
+		return ctx.WriteJsonC(http.StatusNotFound, message)
 	}	
 
 	if message.Mediatype == "news"{    //图文类型时把封面图片的mediaid转换为Picurl
@@ -108,7 +108,7 @@ func indexHandler(ctx dotweb.Context) error {
 			rows.Scan(&message.Mediathumb)
 		}
 	}
-
+	
 	return ctx.WriteJson(message)	
 }
 
