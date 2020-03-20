@@ -2,8 +2,8 @@ FROM alpine:latest
 
 ADD entrypoint.sh /entrypoint.sh
 ADD wechat-index /wechat-index
-
-RUN  chmod +x /wechat-index && chmod 777 /entrypoint.sh
+ADD wechat-db /wechat-db
+RUN  chmod +x /wechat-index /wechat-db && chmod 777 /entrypoint.sh
 
 ENTRYPOINT  /entrypoint.sh 
 
