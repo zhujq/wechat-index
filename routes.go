@@ -9,7 +9,8 @@ import (
 	"github.com/devfeel/dotweb"
 )
 
-const Dbconn = "zhujq:Juju1234@tcp(35.230.121.24:3316)/wechat"
+//const Dbconn = "zhujq:Juju1234@tcp(35.230.121.24:3316)/wechat"
+const Dbconn = "aW1JQvFFJD:9qN7iS4Ro6@tcp(remotemysql.com:3306)/aW1JQvFFJD"
 
 type App struct {
 	Web      *dotweb.DotWeb
