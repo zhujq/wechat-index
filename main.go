@@ -5,11 +5,12 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"io"
+//	"io"
 )
 
 var app = NewApp()
 
+/*
 func init() {                                         //初始，日志文件生成
 	file := "./" +"logindex"+ ".txt"
 	logFile, err := os.OpenFile(file, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0766)
@@ -17,13 +18,14 @@ func init() {                                         //初始，日志文件生
 			panic(err)
 	}
 	defer logFile.Close()
-	//log.SetOutput(logFile) // 将文件设置为log输出的文件
-	mw := io.MultiWriter(os.Stdout,logFile) //同时输出到文件和控制台
-    log.SetOutput(mw)
+	log.SetOutput(logFile) // 将文件设置为log输出的文件
+//	mw := io.MultiWriter(os.Stdout,logFile) //同时输出到文件和控制台
+//  log.SetOutput(mw)
 	log.SetPrefix("[wechat-index]")
 	log.SetFlags(log.LstdFlags | log.Lshortfile | log.LUTC)
 	return
 }
+*/
 
 func main() {
 	var err error
