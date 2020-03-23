@@ -54,7 +54,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	db, err := sql.Open("mysql",Dbconn)
+	db, err = sql.Open("mysql",Dbconn)
 	defer db.Close()
 	err = db.Ping()
 	if err != nil{
