@@ -5,8 +5,13 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"database/sql"
 //	"io"
 )
+
+const Dbconn = "zhujq:Juju1234@tcp(wechat-mysql:3306)/wechat"
+//const Dbconn = "zhujq:Juju1234@tcp(35.230.121.24:3316)/wechat"
+//const Dbconn = "aW1JQvFFJD:9qN7iS4Ro6@tcp(remotemysql.com:3306)/aW1JQvFFJD"
 
 var app = NewApp()
 
@@ -27,6 +32,8 @@ func init() {                                         //初始，日志文件生
 }
 */
 
+var db *sql.DB
+
 func main() {
 	var err error
 
@@ -45,6 +52,14 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 		os.Exit(1)
+	}
+
+	db, err := sql.Open("mysql",Dbconn)
+	defer db.Close()
+	err = db.Ping()
+	if err != nil{
+		log.Println("error:", err)	
+		return 
 	}
 
 	InitRoute(app.Web.HttpServer)

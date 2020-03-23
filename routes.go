@@ -5,17 +5,14 @@ import (
 	"net/http"
 	"strings"
 	_ "github.com/go-sql-driver/mysql"
-	"database/sql"
+//	"database/sql"
 	"github.com/devfeel/dotweb"
 )
-const Dbconn = "zhujq:Juju1234@tcp(wechat-mysql:3306)/wechat"
-//const Dbconn = "zhujq:Juju1234@tcp(35.230.121.24:3316)/wechat"
-//const Dbconn = "aW1JQvFFJD:9qN7iS4Ro6@tcp(remotemysql.com:3306)/aW1JQvFFJD"
+
 
 type App struct {
 	Web      *dotweb.DotWeb
 }
-
 
 
 type ResBody struct {
@@ -52,13 +49,6 @@ func indexHandler(ctx dotweb.Context) error {
 		return ctx.WriteJsonC(http.StatusNotFound, message)
 	}
 
-	db, err := sql.Open("mysql",Dbconn)
-	defer db.Close()
-	err = db.Ping()
-	if err != nil{
-		log.Println("error:", err)	
-		return ctx.WriteJsonC(http.StatusNotFound, message)
-	}
 
 	for {                                            //去掉Keyword首尾空格
 		if strings.HasPrefix(keyword," ") || strings.HasSuffix(keyword," "){
