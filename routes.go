@@ -92,7 +92,7 @@ func indexHandler(ctx dotweb.Context) error {
 	}	
 
 	if message.Mediatype == "news"{    //图文类型时把封面图片的mediaid转换为Picurl
-		sqlstr := `select url from media where mediaid = "` + message.Mediaid + `"; `
+		sqlstr := `select url from media where mediaid = "` + message.Mediathumb+ `"; `
 		rows, _ := db.Query(sqlstr)
 		defer rows.Close()
 		for rows.Next() {
