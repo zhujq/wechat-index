@@ -60,8 +60,18 @@ func indexHandler(ctx dotweb.Context) error {
 
 	}
 
-	keyword = strings.ReplaceAll(keyword,` `,`%" and title like "%`)
-	sqlstr := `select mediatype,mediaid,title,url,digest,thumbmedia from media where title like "%` + keyword + `%"  order by rand() limit 1; `
+	var sqlstr string = ""
+
+	switch keyword{
+	case "help","帮助":
+		sqlstr = `select mediatype,mediaid,title,url,digest,thumbmedia from media where title = "help.jpg"  order by rand() limit 1; `
+	case "about me","关于我":
+		sqlstr = `select mediatype,mediaid,title,url,digest,thumbmedia from media where title = "about me"  order by rand() limit 1; `
+	default:
+		keyword = strings.ReplaceAll(keyword,` `,`%" and title like "%`)
+		sqlstr = `select mediatype,mediaid,title,url,digest,thumbmedia from media where title like "%` + keyword + `%"  order by rand() limit 1; `
+	}
+
 	log.Println(sqlstr)
 
 	row, err := db.Query(sqlstr)
