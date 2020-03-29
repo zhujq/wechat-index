@@ -55,6 +55,7 @@ func main() {
 	}
 
 	db, err = sql.Open("mysql",Dbconn)
+	db.SetConnMaxLifetime(0)
 	defer db.Close()
 	err = db.Ping()
 	if err != nil{
