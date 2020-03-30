@@ -69,7 +69,7 @@ func indexHandler(ctx dotweb.Context) error {
 		sqlstr = `select mediatype,mediaid,title,url,digest,thumbmedia from media where title = "about me"  order by rand() limit 1; `
 	default:
 		keyword = strings.ReplaceAll(keyword,` `,`%" and title like "%`)
-		sqlstr = `select mediatype,mediaid,title,url,digest,thumbmedia from media where title like "%` + keyword + `%"  order by rand() limit 1; `
+		sqlstr = `select a.mediatype,a.mediaid,a.title,a.url,a.digest,a.thumbmedia from media  a inner join (select id from media  where title like "%` + keyword + `%"  order by rand() limit 1) b on a.id=b.id; ` //20200330优化随机返回结果
 	}
 
 	log.Println(sqlstr)
