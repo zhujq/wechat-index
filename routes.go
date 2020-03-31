@@ -64,14 +64,33 @@ func indexHandler(ctx dotweb.Context) error {
 
 	switch keyword{
 	case "help","帮助":
-		sqlstr = `select mediatype,mediaid,title,url,digest,thumbmedia from media where title = "help.jpg"  order by rand() limit 1; `
-	case "about me","关于我":
-		sqlstr = `select mediatype,mediaid,title,url,digest,thumbmedia from media where title = "about me"  order by rand() limit 1; `
+		sqlstr = `select mediatype,mediaid,title,url,digest,thumbmedia from media where title = "公众号使用帮助" and mediatype = "news"  order by rand() limit 1; `
+	case "about me","关于我","aboutme":
+		sqlstr = `select mediatype,mediaid,title,url,digest,thumbmedia from media where title = "about me" and mediatype = "news" order by rand() limit 1; `
+	case "list","文章","文章列表","ls":
+		sqlstr = `select mediatype,mediaid,title,url,digest,thumbmedia from media where title = "原创文章列表" and mediatype = "news" order by rand() limit 1; `
 	default:
 		keyword = strings.ReplaceAll(keyword,` `,`%" and title like "%`)
-		sqlstr = `select a.mediatype,a.mediaid,a.title,a.url,a.digest,a.thumbmedia from media  a inner join (select id from media  where title like "%` + keyword + `%"  order by rand() limit 1) b on a.id=b.id; ` //20200330优化随机返回结果
-	}
+		if strings.LastIndex(keyword,"+") == (len(keyword) - 2) && strings.LastIndex(keyword,"+") != -1 && len(keyword) >= 3 {        //关键字含有+ 且 倒数第二字节是+ 
+			lastword := string(keyword[len(keyword)-1:])
+			prefix := string(keyword[0:len(keyword)-2])
+			switch lastword{
+			case "V","v":
+				sqlstr = `select a.mediatype,a.mediaid,a.title,a.url,a.digest,a.thumbmedia from media a inner join (select id from media  where title like "%` + prefix + `%"  and mediatype = "video" order by rand() limit 1) b on a.id=b.id; ` //20200330优化随机返回结果
+			case "A","a":
+				sqlstr = `select a.mediatype,a.mediaid,a.title,a.url,a.digest,a.thumbmedia from media a inner join (select id from media  where title like "%` + prefix + `%"  and mediatype = "news" order by rand() limit 1) b on a.id=b.id; ` //20200330优化随机返回结果
+			case "I","i":
+				sqlstr = `select a.mediatype,a.mediaid,a.title,a.url,a.digest,a.thumbmedia from media a inner join (select id from media  where title like "%` + prefix + `%"  and mediatype = "image" order by rand() limit 1) b on a.id=b.id; ` //20200330优化随机返回结果		
+			default:
+				sqlstr = `select a.mediatype,a.mediaid,a.title,a.url,a.digest,a.thumbmedia from media a inner join (select id from media  where title like "%` + keyword + `%"  order by rand() limit 1) b on a.id=b.id; ` //20200330优化随机返回结果
 
+			}
+
+		}else{
+			sqlstr = `select a.mediatype,a.mediaid,a.title,a.url,a.digest,a.thumbmedia from media  a inner join (select id from media  where title like "%` + keyword + `%"  order by rand() limit 1) b on a.id=b.id; ` //20200330优化随机返回结果
+	
+		}
+	}
 	log.Println(sqlstr)
 
 	row, err := db.Query(sqlstr)
