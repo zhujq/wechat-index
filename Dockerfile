@@ -6,4 +6,4 @@ ADD wechat-db /wechat-db
 RUN  chmod +x /wechat-index /wechat-db && chmod 777 /entrypoint.sh
 ENTRYPOINT  /entrypoint.sh 
 
-EXPOSE 80
+EXPOSE 8080
