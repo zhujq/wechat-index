@@ -39,7 +39,7 @@ func main() {
 
 	var (
 		version = flag.Bool("version", false, "version v1.0")
-		port    = flag.Int("port", 80, "listen port.")
+		port    = flag.Int("port", 8080, "listen port.")
 	)
 
 	flag.Parse()
